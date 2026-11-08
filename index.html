@@ -4,70 +4,278 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Recent Music</title>
 
+<title>lastfm widget hello durr</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
 <style>
-  body {
-    background: transparent;
-    color: black;
-    font-family: Arial, sans-serif;
-  }
+* {
+  box-sizing: border-box;
+}
 
-  #tracks {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
+body {
+  margin: 0;
+  padding: 16px;
+  background: transparent;
+  color: #f5f5f5;
+  font-family: "Google Sans", sans-serif;
+}
 
-  .track {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+.player {
+  max-width: 420px;
+  margin: auto;
+  padding: 22px;
+  border-radius: 20px;
+  background:
+    radial-gradient(ellipse at top left, #283d35 0%, transparent 55%),
+    linear-gradient(145deg, #171c1a, #101211 70%);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 15px 45px rgba(0,0,0,0.25);
+}
 
-  .track img {
-    width: 55px;
-    height: 55px;
-    object-fit: cover;
-    border-radius: 6px;
-  }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
 
-  .info {
-    min-width: 0;
-  }
+.brand {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
 
-  .song {
-    font-weight: bold;
-    font-size: 14px;
-  }
+.brand span {
+  color: #a1e9b5;
+}
 
-  .artist {
-    font-size: 12px;
-    opacity: 0.65;
-    margin-top: 4px;
-  }
+.live {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #a1e9b5;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
 
-  .status {
-    font-size: 10px;
-    color: #1ed760;
-    margin-top: 4px;
-  }
+.dot {
+  width: 7px;
+  height: 7px;
+  background: #72e69b;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  50% { opacity: 0.3; }
+}
+
+.featured {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  margin-bottom: 25px;
+}
+
+.cover {
+  width: 112px;
+  height: 112px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  object-fit: cover;
+  background: #272e2a;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+}
+
+.feature-info {
+  min-width: 0;
+}
+
+.eyebrow {
+  font-size: 10px;
+  color: #a1e9b5;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 9px;
+}
+
+.feature-title {
+  font-size: 18px;
+  line-height: 1.25;
+  font-weight: 750;
+  overflow-wrap: anywhere;
+}
+
+.feature-artist {
+  color: #9ba49e;
+  font-size: 13px;
+  margin-top: 7px;
+  overflow-wrap: anywhere;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.section-heading strong {
+  font-size: 12px;
+  letter-spacing: 1.3px;
+}
+
+.section-heading span {
+  font-size: 10px;
+  color: #7e8982;
+}
+
+.track-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px;
+  border-radius: 10px;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.track:hover {
+  background: rgba(255,255,255,0.07);
+}
+
+.track img {
+  width: 43px;
+  height: 43px;
+  border-radius: 7px;
+  object-fit: cover;
+  background: #272e2a;
+  flex-shrink: 0;
+}
+
+.track-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.track-name {
+  font-size: 14px;
+  font-weight: 650;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-artist {
+  color: #8e9992;
+  font-size: 11px;
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-number {
+  color: #67736b;
+  font-size: 11px;
+}
+
+.footer {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 16px;
+  padding-top: 13px;
+  display: flex;
+  justify-content: space-between;
+  color: #737f77;
+  font-size: 10px;
+}
+
+.footer a {
+  color: #a1e9b5;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.loading, .error {
+  color: #9ba49e;
+  font-size: 13px;
+  padding: 20px 0;
+}
+
 </style>
 </head>
 
 <body>
 
-<div id="tracks">Loading tracks...</div>
+<div class="player">
+
+
+  <div id="featured" class="loading">
+    Loading music...
+  </div>
+
+  <div class="section-heading">
+    <strong>RECENTLY PLAYED</strong>
+    <span>LAST 5 TRACKS</span>
+  </div>
+
+  <div id="tracks" class="track-list"></div>
+
+  <div class="footer">
+    <span id="updated">Connecting to Last.fm</span>
+    <a href="https://www.last.fm/user/wolfboi0" target="_blank">
+      last.fm/user/wolfboi0 ↗
+    </a>
+  </div>
+
+</div>
 
 <script>
 const API_KEY = "e5dab8d6d9862406c2aaf1387e6ccbe0";
 const USERNAME = "wolfboi0";
 
-async function loadTracks() {
-  const container = document.getElementById("tracks");
+const featured = document.getElementById("featured");
+const tracksContainer = document.getElementById("tracks");
 
+function makeElement(tag, className, text) {
+  const el = document.createElement(tag);
+  el.className = className;
+  if (text !== undefined) el.textContent = text;
+  return el;
+}
+
+function getArtwork(track) {
+  const images = track.image || [];
+  return images.find(i => i.size === "extralarge")?.["#text"]
+    || images.find(i => i.size === "large")?.["#text"]
+    || images.find(i => i.size === "medium")?.["#text"]
+    || "";
+}
+
+function createArtwork(track, className) {
+  const img = makeElement("img", className);
+  img.src = getArtwork(track);
+  img.alt = track.album?.["#text"] || "Album artwork";
+  img.onerror = () => {
+    img.style.visibility = "hidden";
+  };
+  return img;
+}
+
+async function loadTracks() {
   try {
     const url = new URL("https://ws.audioscrobbler.com/2.0/");
+
     url.search = new URLSearchParams({
       method: "user.getRecentTracks",
       user: USERNAME,
@@ -77,78 +285,97 @@ async function loadTracks() {
     });
 
     const response = await fetch(url);
+
     if (!response.ok) throw new Error("API request failed");
 
     const data = await response.json();
 
     if (data.error) throw new Error(data.message);
 
-    const tracks = data.recenttracks.track;
-    const recent = tracks
-      .filter(track => track["@attr"]?.nowplaying !== "true")
-      .slice(0, 5);
+    const allTracks = data.recenttracks.track;
 
-    container.innerHTML = "";
-
-    // Include currently playing track separately if available
-    const nowPlaying = tracks.find(
-      track => track["@attr"]?.nowplaying === "true"
+    const nowPlaying = allTracks.find(
+      t => t["@attr"]?.nowplaying === "true"
     );
 
-    const displayTracks = nowPlaying
-      ? [nowPlaying, ...recent]
-      : recent;
+    const recent = allTracks
+      .filter(t => t["@attr"]?.nowplaying !== "true")
+      .slice(0, 5);
 
-    displayTracks.forEach(track => {
-      const artist = track.artist["#text"];
-      const name = track.name;
-      const album = track.album["#text"];
-      const image = track.image?.find(
-        img => img.size === "medium"
-      )?.["#text"];
+    // Featured section
+    const mainTrack = nowPlaying || recent[0];
 
-      const isPlaying =
-        track["@attr"]?.nowplaying === "true";
+    if (mainTrack) {
+      featured.replaceChildren();
 
-      const element = document.createElement("div");
-      element.className = "track";
+      const featuredBox = makeElement("div", "featured");
 
-      const artwork = document.createElement("img");
-      artwork.src = image || "";
-      artwork.alt = album || "Album artwork";
+      featuredBox.append(
+        createArtwork(mainTrack, "cover")
+      );
 
-      const info = document.createElement("div");
-      info.className = "info";
+      const info = makeElement("div", "feature-info");
 
-      const song = document.createElement("div");
-      song.className = "song";
-      song.textContent = name;
+      info.append(
+        makeElement(
+          "div",
+          "eyebrow",
+          nowPlaying ? "● NOW PLAYING" : "LATEST SCROBBLE"
+        ),
+        makeElement("div", "feature-title", mainTrack.name),
+        makeElement(
+          "div",
+          "feature-artist",
+          mainTrack.artist["#text"]
+        )
+      );
 
-      const artistName = document.createElement("div");
-      artistName.className = "artist";
-      artistName.textContent = artist;
+      featuredBox.append(info);
+      featured.append(featuredBox);
+    }
 
-      info.append(song, artistName);
+    // Five most recently completed tracks
+    tracksContainer.replaceChildren();
 
-      if (isPlaying) {
-        const status = document.createElement("div");
-        status.className = "status";
-        status.textContent = "NOW PLAYING";
-        info.append(status);
-      }
+    recent.forEach((track, index) => {
+      const row = makeElement("div", "track");
 
-      element.append(artwork, info);
-      container.append(element);
+      row.append(createArtwork(track, ""));
+
+      const info = makeElement("div", "track-info");
+
+      info.append(
+        makeElement("div", "track-name", track.name),
+        makeElement(
+          "div",
+          "track-artist",
+          track.artist["#text"]
+        )
+      );
+
+      row.append(
+        info,
+      );
+
+      tracksContainer.append(row);
     });
 
+    document.getElementById("updated").textContent =
+      "Updated " + new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
+
   } catch (error) {
-    container.textContent = "Unable to load tracks.";
     console.error(error);
+    featured.textContent = "Couldn't load your music.";
+    tracksContainer.replaceChildren();
   }
 }
 
 loadTracks();
-setInterval(loadTracks, 30000);
+setInterval(loadTracks, 3000);
 </script>
 
 </body>
