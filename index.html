@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Recent Music</title>
+
+<style>
+  body {
+    background: transparent;
+    color: white;
+    font-family: Arial, sans-serif;
+  }
+
+  #tracks {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .track {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .track img {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  .info {
+    min-width: 0;
+  }
+
+  .song {
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .artist {
+    font-size: 12px;
+    opacity: 0.65;
+    margin-top: 4px;
+  }
+
+  .status {
+    font-size: 10px;
+    color: #1ed760;
+    margin-top: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+<div id="tracks">Loading tracks...</div>
+
+<script>
+const API_KEY = "e5dab8d6d9862406c2aaf1387e6ccbe0";
+const USERNAME = "wolfboi0";
+
+async function loadTracks() {
+  const container = document.getElementById("tracks");
+
+  try {
+    const url = new URL("https://ws.audioscrobbler.com/2.0/");
+    url.search = new URLSearchParams({
+      method: "user.getRecentTracks",
+      user: USERNAME,
+      api_key: API_KEY,
+      format: "json",
+      limit: "10"
+    });
+
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("API request failed");
+
+    const data = await response.json();
+
+    if (data.error) throw new Error(data.message);
+
+    const tracks = data.recenttracks.track;
+    const recent = tracks
+      .filter(track => track["@attr"]?.nowplaying !== "true")
+      .slice(0, 5);
+
+    container.innerHTML = "";
+
+    // Include currently playing track separately if available
+    const nowPlaying = tracks.find(
+      track => track["@attr"]?.nowplaying === "true"
+    );
+
+    const displayTracks = nowPlaying
+      ? [nowPlaying, ...recent]
+      : recent;
+
+    displayTracks.forEach(track => {
+      const artist = track.artist["#text"];
+      const name = track.name;
+      const album = track.album["#text"];
+      const image = track.image?.find(
+        img => img.size === "medium"
+      )?.["#text"];
+
+      const isPlaying =
+        track["@attr"]?.nowplaying === "true";
+
+      const element = document.createElement("div");
+      element.className = "track";
+
+      const artwork = document.createElement("img");
+      artwork.src = image || "";
+      artwork.alt = album || "Album artwork";
+
+      const info = document.createElement("div");
+      info.className = "info";
+
+      const song = document.createElement("div");
+      song.className = "song";
+      song.textContent = name;
+
+      const artistName = document.createElement("div");
+      artistName.className = "artist";
+      artistName.textContent = artist;
+
+      info.append(song, artistName);
+
+      if (isPlaying) {
+        const status = document.createElement("div");
+        status.className = "status";
+        status.textContent = "NOW PLAYING";
+        info.append(status);
+      }
+
+      element.append(artwork, info);
+      container.append(element);
+    });
+
+  } catch (error) {
+    container.textContent = "Unable to load tracks.";
+    console.error(error);
+  }
+}
+
+loadTracks();
+setInterval(loadTracks, 30000);
+</script>
+
+</body>
+</html>
